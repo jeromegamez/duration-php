@@ -6,7 +6,7 @@ namespace Gamez;
 
 use DateInterval;
 use DateTimeImmutable;
-use InvalidArgumentException;
+use Gamez\Duration\Exception\InvalidDuration;
 use Spatie\Macroable\Macroable;
 
 final class Duration implements \JsonSerializable
@@ -75,7 +75,7 @@ final class Duration implements \JsonSerializable
         $then = $now->add($this->toDateInterval())->sub($duration->toDateInterval());
 
         if ($then < $now) {
-            throw new InvalidArgumentException('A duration cannot be smaller than zero');
+            throw InvalidDuration::because('A duration cannot be smaller than zero');
         }
 
         return new self($then->diff($now, true));
@@ -104,7 +104,7 @@ final class Duration implements \JsonSerializable
     public function multipliedBy($multiplicator): self
     {
         if ($multiplicator < 0) {
-            throw new InvalidArgumentException('A duration cannot be multiplied with a value smaller than zero');
+            throw InvalidDuration::because('A duration cannot be multiplied with a value smaller than zero');
         }
 
         $now = new DateTimeImmutable();

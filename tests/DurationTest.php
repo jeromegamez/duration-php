@@ -2,7 +2,12 @@
 
 declare(strict_types=1);
 
+namespace Gamez\Duration\Tests;
+
+use DateInterval;
+use DateTimeImmutable;
 use Gamez\Duration;
+use Gamez\Duration\Exception\InvalidDuration;
 use PHPUnit\Framework\TestCase;
 
 class DurationTest extends TestCase
@@ -66,7 +71,7 @@ class DurationTest extends TestCase
     /** @test */
     public function it_can_not_result_in_a_negative_value()
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(InvalidDuration::class);
         Duration::none()->withSubtracted(Duration::make('1 second'));
     }
 
@@ -93,7 +98,7 @@ class DurationTest extends TestCase
     /** @test */
     public function it_can_not_be_multiplied_with_a_negative_value()
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(InvalidDuration::class);
         Duration::none()->multipliedBy(-1.1);
     }
 
