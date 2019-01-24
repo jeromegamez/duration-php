@@ -1,0 +1,46 @@
+{
+    "name": "gamez/duration",
+    "description": "Working with durations made easy",
+    "keywords": ["duration", "time"],
+    "license": "MIT",
+    "homepage": "https://github.com/jeromegamez/duration-php",
+    "authors": [
+        {
+            "name": "Jérôme Gamez",
+            "homepage": "https://github.com/jeromegamez"
+        }
+    ],
+    "require": {
+        "php": "^7.1",
+        "spatie/macroable": "^1.0"
+    },
+    "require-dev": {
+        "phpstan/phpstan": "^0.11.1",
+        "phpunit/phpunit": "^7.5"
+    },
+    "autoload": {
+        "psr-4": {
+            "Gamez\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Gamez\\Duration\\Tests\\": "tests"
+        }
+    },
+    "scripts": {
+        "test": ["@phpunit", "@phpstan"],
+        "test-ci": ["@phpunit-ci", "@phpstan-ci"],
+
+        "coverage": "vendor/bin/phpunit --coverage-html=build/coverage",
+
+        "phpunit": "vendor/bin/phpunit --testdox",
+        "phpunit-ci": "vendor/bin/phpunit -c phpunit.xml.dist --testdox",
+
+        "phpstan": "vendor/bin/phpstan analyze",
+        "phpstan-ci": "vendor/bin/phpstan analyze -c phpstan.neon.dist --no-interaction --no-progress"
+    },
+    "config": {
+        "sort-packages": true
+    }
+}

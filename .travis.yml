@@ -1,0 +1,21 @@
+language: php
+sudo: false
+
+php:
+    - 7.1
+    - 7.2
+    - 7.3
+    - nightly
+
+matrix:
+    fast_finish: true
+    allow_failures:
+        - php: nightly
+
+cache:
+    directories:
+        - $HOME/.composer/cache
+
+install: composer update --no-interaction --no-suggest --no-progress
+
+script: composer test-ci
