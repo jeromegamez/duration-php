@@ -47,7 +47,7 @@ $duration = Duration::make('13 minutes 37 seconds');
 #### DateIntervals
 
 ```php
-Duration::make(P13M37S');
+Duration::make('P13M37S');
 Duration::make(new DateInterval('P13M37S'));
 ```
 
