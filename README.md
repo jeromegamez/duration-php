@@ -6,7 +6,7 @@ Working with durations made easy.
 [![Supported PHP version](https://img.shields.io/packagist/php-v/gamez/duration.svg)]()
 [![Build Status](https://travis-ci.com/jeromegamez/duration-php.svg?branch=master)](https://travis-ci.com/jeromegamez/duration-php)
 
-Do you like to use `DateTimeInverval` to compute and work with durations? Me neither, so let's fix that!
+Do you like to use `DateInverval` to compute and work with durations? Me neither, so let's fix that!
 
 * [Installation](#installation)
 * [Reference](#reference)
