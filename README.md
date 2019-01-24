@@ -141,6 +141,6 @@ echo $duration->shuffle(); // This doesn't make sense
 
 * Support more input formats
 * Add "output for humans" (like colon notation)
-* Support flags to configure the handling of edge cases (e.g. negative operation results)
+* Support flags to configure precisions (similar to [spatie/period](https://github.com/spatie/period))
 * ...
 
