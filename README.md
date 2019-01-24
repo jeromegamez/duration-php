@@ -6,7 +6,7 @@ Working with durations made easy.
 [![Supported PHP version](https://img.shields.io/packagist/php-v/gamez/duration.svg)]()
 [![Build Status](https://travis-ci.com/jeromegamez/duration-php.svg?branch=master)](https://travis-ci.com/jeromegamez/duration-php)
 
-Do you like to use `DateInverval` to compute and work with durations? Me neither, so let's fix that!
+Do you like to use `DateInterval` to compute and work with durations? Me neither, so let's fix that!
 
 * [Installation](#installation)
 * [Reference](#reference)
@@ -47,7 +47,7 @@ $duration = Duration::make('13 minutes 37 seconds');
 #### DateIntervals
 
 ```php
-Duration::make(P13M37S');
+Duration::make('P13M37S');
 Duration::make(new DateInterval('P13M37S'));
 ```
 
