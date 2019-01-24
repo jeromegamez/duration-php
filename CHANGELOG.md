@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 1.1 - 2019-01-24
 
 * Thrown exceptions implement `Gamez\Duration\DurationException`
 * An operation resulting in an invalid duration will throw a `Gamez\Duration\Exception\InvalidDuration`
