@@ -36,6 +36,8 @@ require 'vendor/autoload.php';
 use Gamez\Duration;
 
 $duration = Duration::make('13 minutes 37 seconds');
+// or start with nothing
+$duration = Duration::none();
 ```
 
 ---
