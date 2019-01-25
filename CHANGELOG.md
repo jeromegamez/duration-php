@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 2.0 - 2019-01-25
 
 * The `Duration` class is now extensible instead of macroable
 
