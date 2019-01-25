@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+* The `Duration` class is now extensible instead of macroable
+
 ## 1.1 - 2019-01-24
 
 * Thrown exceptions implement `Gamez\Duration\DurationException`

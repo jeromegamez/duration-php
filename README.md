@@ -14,7 +14,6 @@ Do you like to use `DateInterval` to compute and work with durations? Me neither
   * [Transformations](#transformations)
   * [Comparisons](#comparisons)
   * [Operations](#operations)
-* [Extending `Gamez\Duration`](#extending-gamezduration)
 * [Roadmap](#roadmap)
 
 ---
@@ -98,6 +97,10 @@ $oneHour->isLargerThan($oneMinute); // true
 $oneMinute->equals($sixtySeconds); // true
 
 $durations = [$oneMinute, $oneSecond, $oneHour, $sixtySeconds];
+
+usort($durations, function ($a, $b) {
+    return $a->compareTo($b);
+}); // -> [$oneSecond, $sixtySeconds, $oneMinute, $oneHour]
 ```
 
 ### Operations
@@ -118,29 +121,10 @@ $thirty->withSubtracted('31 seconds'); // InvalidArgumentException
 
 ---
 
-## Extending `Gamez\Duration`
-
-Are you missing a feature in the `Gamez\Duration` class? Please consider making a
-pull request if you think others would benefit from this feature as well.
-
-Otherwise, you can dynamically add methods to the class with the help of 
-[spatie/macroable](https://github.com/spatie/macroable):
-
-```php
-Duration::macro('shuffle', function () {
-    return str_shuffle((string) $this);
-});
-
-$duration = Duration::make('30 seconds');
-echo $duration->shuffle(); // This doesn't make sense
-```
-
----
-
 ## Roadmap
 
 * Support more input formats
 * Add "output for humans" (like colon notation)
-* Support flags to configure precisions (similar to [spatie/period](https://github.com/spatie/period))
+* Support precision (similar to [spatie/period](https://github.com/spatie/period))
 * ...
 

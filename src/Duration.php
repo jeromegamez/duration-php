@@ -7,12 +7,9 @@ namespace Gamez;
 use DateInterval;
 use DateTimeImmutable;
 use Gamez\Duration\Exception\InvalidDuration;
-use Spatie\Macroable\Macroable;
 
-final class Duration implements \JsonSerializable
+class Duration implements \JsonSerializable
 {
-    use Macroable;
-
     private const NONE = 'PT0S';
 
     /**
