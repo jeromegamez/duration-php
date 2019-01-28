@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+* New `DateTimeImmutable` instances ignore timezones when created [#3](https://github.com/jeromegamez/duration-php/issues/3)
+
 ## 3.0 - 2019-01-28
 
 * The `Duration` class is final again (and will stay that way) [#2](https://github.com/jeromegamez/duration-php/issues/2)

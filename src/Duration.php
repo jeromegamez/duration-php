@@ -58,7 +58,7 @@ final class Duration implements \JsonSerializable
     {
         $duration = $duration instanceof self ? $duration : self::make($duration);
 
-        $now = new DateTimeImmutable();
+        $now = $this->now();
         $then = $now->add($this->toDateInterval())->add($duration->toDateInterval());
 
         return new self($then->diff($now, true));
@@ -68,7 +68,7 @@ final class Duration implements \JsonSerializable
     {
         $duration = $duration instanceof self ? $duration : self::make($duration);
 
-        $now = new DateTimeImmutable();
+        $now = $this->now();
         $then = $now->add($this->toDateInterval())->sub($duration->toDateInterval());
 
         if ($then < $now) {
@@ -84,7 +84,7 @@ final class Duration implements \JsonSerializable
             throw InvalidDuration::because('A duration cannot be multiplied with a value smaller than zero');
         }
 
-        $now = new DateTimeImmutable();
+        $now = $this->now();
         $there = $now->add($this->toDateInterval());
 
         $durationInSeconds = $there->getTimestamp() - $now->getTimestamp();
@@ -95,7 +95,7 @@ final class Duration implements \JsonSerializable
 
     public function dividedBy($divisor): self
     {
-        $now = new DateTimeImmutable();
+        $now = $this->now();
         $there = $now->add($this->toDateInterval());
 
         $durationInSeconds = $there->getTimestamp() - $now->getTimestamp();
@@ -123,7 +123,7 @@ final class Duration implements \JsonSerializable
     {
         $other = $other instanceof self ? $other : self::make($other);
 
-        $now = new DateTimeImmutable();
+        $now = $this->now();
         $here = $now->add($this->toDateInterval());
         $there = $now->add($other->toDateInterval());
 
@@ -134,7 +134,7 @@ final class Duration implements \JsonSerializable
     {
         $other = $other instanceof self ? $other : self::make($other);
 
-        $now = new DateTimeImmutable();
+        $now = $this->now();
         $here = $now->add($this->toDateInterval());
         $there = $now->add($other->toDateInterval());
 
@@ -156,9 +156,14 @@ final class Duration implements \JsonSerializable
         return $this->toDateIntervalSpec();
     }
 
+    private function now(): DateTimeImmutable
+    {
+        return new DateTimeImmutable('@'.time());
+    }
+
     private function normalizeInterval(DateInterval $value): DateInterval
     {
-        $now = new DateTimeImmutable();
+        $now = $this->now();
         $then = $now->add($value);
 
         return $now->diff($then);
