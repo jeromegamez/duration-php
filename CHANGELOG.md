@@ -1,5 +1,9 @@
 # Changelog
 
+## Unrelease
+
+* The `Duration` class is final again (and will stay that way) [#2](https://github.com/jeromegamez/duration-php/issues/2)
+
 ## 2.0 - 2019-01-25
 
 * The `Duration` class is now extensible instead of macroable

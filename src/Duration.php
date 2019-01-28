@@ -8,7 +8,7 @@ use DateInterval;
 use DateTimeImmutable;
 use Gamez\Duration\Exception\InvalidDuration;
 
-class Duration implements \JsonSerializable
+final class Duration implements \JsonSerializable
 {
     private const NONE = 'PT0S';
 
