@@ -1,6 +1,6 @@
 # Changelog
 
-## Unrelease
+## 3.0 - 2019-01-28
 
 * The `Duration` class is final again (and will stay that way) [#2](https://github.com/jeromegamez/duration-php/issues/2)
 
