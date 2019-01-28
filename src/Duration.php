@@ -78,26 +78,6 @@ final class Duration implements \JsonSerializable
         return new self($then->diff($now, true));
     }
 
-    public function toDateInterval(): DateInterval
-    {
-        return $this->value;
-    }
-
-    public function isLargerThan($other): bool
-    {
-        return 1 === $this->compareTo($other);
-    }
-
-    public function equals($other): bool
-    {
-        return 0 === $this->compareTo($other);
-    }
-
-    public function isSmallerThan($other): bool
-    {
-        return -1 === $this->compareTo($other);
-    }
-
     public function multipliedBy($multiplicator): self
     {
         if ($multiplicator < 0) {
@@ -124,6 +104,21 @@ final class Duration implements \JsonSerializable
         return self::make($result.' seconds');
     }
 
+    public function isLargerThan($other): bool
+    {
+        return 1 === $this->compareTo($other);
+    }
+
+    public function equals($other): bool
+    {
+        return 0 === $this->compareTo($other);
+    }
+
+    public function isSmallerThan($other): bool
+    {
+        return -1 === $this->compareTo($other);
+    }
+
     public function diff($other): self
     {
         $other = $other instanceof self ? $other : self::make($other);
@@ -144,6 +139,21 @@ final class Duration implements \JsonSerializable
         $there = $now->add($other->toDateInterval());
 
         return $here <=> $there;
+    }
+
+    public function toDateInterval(): DateInterval
+    {
+        return $this->value;
+    }
+
+    public function jsonSerialize()
+    {
+        return $this->toDateIntervalSpec();
+    }
+
+    public function __toString()
+    {
+        return $this->toDateIntervalSpec();
     }
 
     private function normalizeInterval(DateInterval $value): DateInterval
@@ -177,15 +187,5 @@ final class Duration implements \JsonSerializable
         }
 
         return $value->format($spec);
-    }
-
-    public function jsonSerialize()
-    {
-        return $this->toDateIntervalSpec();
-    }
-
-    public function __toString()
-    {
-        return $this->toDateIntervalSpec();
     }
 }
