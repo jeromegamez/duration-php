@@ -23,7 +23,7 @@ Do you like to use `DateInterval` to compute and work with durations? Me neither
 You can install the package with [Composer](https://getcomposer.org):
 
 ```bash
-composer install gamez/duration
+composer require gamez/duration
 ```
 
 You can then use Duration:
