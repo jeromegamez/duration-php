@@ -29,13 +29,8 @@
     },
     "scripts": {
         "test": ["@phpunit", "@phpstan"],
-        "test-ci": ["@phpunit-ci", "@phpstan-ci"],
-
         "coverage": "vendor/bin/phpunit --coverage-html=build/coverage",
-
         "phpunit": "vendor/bin/phpunit --testdox",
-        "phpunit-ci": "vendor/bin/phpunit -c phpunit.xml.dist --testdox",
-
         "phpstan": "vendor/bin/phpstan analyze",
         "phpstan-ci": "vendor/bin/phpstan analyze -c phpstan.neon.dist --no-interaction --no-progress"
     },
