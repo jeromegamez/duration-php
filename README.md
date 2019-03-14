@@ -4,7 +4,12 @@ Working with durations made easy.
 
 [![Current version](https://img.shields.io/packagist/v/gamez/duration.svg)](https://packagist.org/packages/gamez/duration)
 [![Supported PHP version](https://img.shields.io/packagist/php-v/gamez/duration.svg)]()
+
 [![Build Status](https://travis-ci.com/jeromegamez/duration-php.svg?branch=master)](https://travis-ci.com/jeromegamez/duration-php)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=jeromegamez_duration-php&metric=alert_status)](https://sonarcloud.io/dashboard?id=jeromegamez_duration-php)
+[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=jeromegamez_duration-php&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=jeromegamez_duration-php)
+[![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=jeromegamez_duration-php&metric=reliability_rating)](https://sonarcloud.io/dashboard?id=jeromegamez_duration-php)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=jeromegamez_duration-php&metric=coverage)](https://sonarcloud.io/dashboard?id=jeromegamez_duration-php)
 
 Do you like to use `DateInterval` to compute and work with durations? Me neither, so let's fix that!
 
