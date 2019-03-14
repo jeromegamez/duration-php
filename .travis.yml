@@ -16,6 +16,16 @@ cache:
     directories:
         - $HOME/.composer/cache
 
+addons:
+    sonarcloud:
+        organization: "jeromegamez-github"
+
+git:
+    depth: false
+
 install: composer update --no-interaction --no-suggest --no-progress
 
-script: composer test-ci
+script:
+    - vendor/bin/phpstan analyze -c phpstan.neon.dist --no-interaction --no-progress
+    - vendor/bin/phpunit -c phpunit.xml.dist --coverage-clover coverage.clover --log-junit tests.xml
+    - sonar-scanner
