@@ -39,6 +39,7 @@ class DurationTest extends TestCase
             'DateInterval Spec ("P1DT1H")' => ['P1DT1H', 'P1DT1H'],
             'DateInterval("PT24H")' => [new DateInterval('PT24H'), 'P1D'],
             'Duration("PT24H")' => [Duration::make('PT24H'), 'P1D'],
+            'too verbose' => [Duration::make('P0Y0M0DT0H0M3600S'), 'PT1H'],
         ];
     }
 
