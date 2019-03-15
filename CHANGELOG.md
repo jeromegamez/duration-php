@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+* `toIntervalSpec()` did more than it needed to do. Instead of formatting the current value the spec itself is now returned.
+
 ## 3.0.1 - 2019-01-28
 
 * New `DateTimeImmutable` instances ignore timezones when created [#3](https://github.com/jeromegamez/duration-php/issues/3)

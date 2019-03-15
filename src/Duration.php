@@ -171,17 +171,17 @@ final class Duration implements \JsonSerializable
 
     private function toDateIntervalSpec(): string
     {
-        $value = $this->toDateInterval();
+        $current = $this->value;
 
         $spec = 'P';
-        $spec .= 0 !== $value->y ? '%yY' : '';
-        $spec .= 0 !== $value->m ? '%mM' : '';
-        $spec .= 0 !== $value->d ? '%dD' : '';
+        $spec .= 0 !== $current->y ? $current->y.'Y' : '';
+        $spec .= 0 !== $current->m ? $current->m.'M' : '';
+        $spec .= 0 !== $current->d ? $current->d.'D' : '';
 
         $spec .= 'T';
-        $spec .= 0 !== $value->h ? '%hH' : '';
-        $spec .= 0 !== $value->i ? '%iM' : '';
-        $spec .= 0 !== $value->s ? '%sS' : '';
+        $spec .= 0 !== $current->h ? $current->h.'H' : '';
+        $spec .= 0 !== $current->i ? $current->i.'M' : '';
+        $spec .= 0 !== $current->s ? $current->s.'S' : '';
 
         if ('T' === substr($spec, -1)) {
             $spec = substr($spec, 0, -1);
@@ -191,6 +191,6 @@ final class Duration implements \JsonSerializable
             return self::NONE;
         }
 
-        return $value->format($spec);
+        return $spec;
     }
 }
