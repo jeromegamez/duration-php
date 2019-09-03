@@ -32,6 +32,9 @@ class DurationTest extends TestCase
     public function validValues()
     {
         return [
+            'nothing (null)' => [null, 'PT0S'],
+            'nothing (false)' => [false, 'PT0S'],
+            'nothing (true)' => [true, 'PT0S'],
             'nothing ("")' => ['', 'PT0S'],
             'textual ("13 minutes 37 seconds")' => ['13 minutes 37 seconds', 'PT13M37S'],
             'minutes:seconds ("01:23")' => ['01:23', 'PT1M23S'],
@@ -41,6 +44,20 @@ class DurationTest extends TestCase
             'Duration("PT24H")' => [Duration::make('PT24H'), 'P1D'],
             'too verbose' => [Duration::make('P0Y0M0DT0H0M3600S'), 'PT1H'],
         ];
+    }
+
+    /** @test */
+    public function it_needs_a_unit()
+    {
+        $this->expectException(InvalidDuration::class);
+        Duration::make(60);
+    }
+
+    /** @test */
+    public function it_needs_a_parseable_value()
+    {
+        $this->expectException(InvalidDuration::class);
+        Duration::make('xxx');
     }
 
     /** @test */

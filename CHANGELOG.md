@@ -2,7 +2,9 @@
 
 ## Unreleased
 
-* PHP 7.3 is now the minimum required version
+* PHP 7.3 is now the minimum required version.
+* `0`, `null`, `false`, `true` are now supported values as in that they result in `Duration::none()` (`PT0S`).
+* An `InvalidDuration` error will be thrown if a value is given without a unit or if the given value cannot be parsed. 
 * `toIntervalSpec()` did more than it needed to do. Instead of formatting the current value the spec itself is now returned.
 
 ## 3.0.1 - 2019-01-28

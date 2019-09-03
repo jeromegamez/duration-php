@@ -7,6 +7,7 @@ namespace Gamez;
 use DateInterval;
 use DateTimeImmutable;
 use Gamez\Duration\Exception\InvalidDuration;
+use Throwable;
 
 final class Duration implements \JsonSerializable
 {
@@ -28,7 +29,19 @@ final class Duration implements \JsonSerializable
             return new self($value);
         }
 
-        $stringValue = (string) $value;
+        if (in_array($value, [0, null, false, true], true)) {
+            return self::none();
+        }
+
+        $stringValue = trim((string) $value);
+
+        if ($value === '') {
+            return self::none();
+        }
+
+        if (ctype_digit($stringValue)) {
+            throw InvalidDuration::because('A duration needs a unit');
+        }
 
         if (preg_match('/^(\d+):(\d+)$/', $stringValue)) {
             [$minutes, $seconds] = array_map('intval', explode(':', $stringValue));
@@ -46,7 +59,11 @@ final class Duration implements \JsonSerializable
             return new self(new DateInterval($stringValue));
         }
 
-        return new self(DateInterval::createFromDateString($stringValue));
+        try {
+            return new self(DateInterval::createFromDateString($stringValue));
+        } catch (Throwable $e) {
+            throw InvalidDuration::because('Unable to parse value: '.$e->getMessage());
+        }
     }
 
     public static function none(): self
