@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+* PHP 7.3 is now the minimum required version
 * `toIntervalSpec()` did more than it needed to do. Instead of formatting the current value the spec itself is now returned.
 
 ## 3.0.1 - 2019-01-28
