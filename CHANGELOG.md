@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 4.0 - 2019-09-03
 
 * PHP 7.3 is now the minimum required version.
 * `0`, `null`, `false`, `true` are now supported values as in that they result in `Duration::none()` (`PT0S`).
