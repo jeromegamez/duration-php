@@ -5,6 +5,7 @@ Working with durations made easy.
 [![Current version](https://img.shields.io/packagist/v/gamez/duration.svg)](https://packagist.org/packages/gamez/duration)
 ![Supported PHP version](https://img.shields.io/packagist/php-v/gamez/duration.svg)
 [![Code Coverage](https://codecov.io/gh/jeromegamez/duration-php/branch/master/graph/badge.svg)](https://codecov.io/gh/jeromegamez/duration-php)
+[![Sponsor](https://img.shields.io/static/v1?logo=GitHub&label=Sponsor&message=%E2%9D%A4&color=ff69b4)](https://github.com/sponsors/jeromegamez)
 
 Do you like to use `DateInterval` to compute and work with durations? Me neither, so let's fix that!
 
