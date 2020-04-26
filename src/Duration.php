@@ -15,7 +15,7 @@ final class Duration extends DateInterval implements JsonSerializable
     private const NONE = 'PT0S';
 
     /**
-     * @param string $spec An interval specification
+     * @param string $spec An interval/duration specification
      *
      * @throws InvalidDuration if the specification cannot be parsed
      */
@@ -29,7 +29,7 @@ final class Duration extends DateInterval implements JsonSerializable
     }
 
     /**
-     * @param mixed $value An interval
+     * @param mixed $value An interval/duration
      *
      * @throws InvalidDuration if the specification cannot be parsed
      */
@@ -97,6 +97,9 @@ final class Duration extends DateInterval implements JsonSerializable
         return new self(self::NONE);
     }
 
+    /**
+     * @param mixed $duration An interval/duration
+     */
     public function withAdded($duration): self
     {
         $duration = $duration instanceof self ? $duration : self::make($duration);
@@ -107,6 +110,9 @@ final class Duration extends DateInterval implements JsonSerializable
         return self::make($then->diff($now, true));
     }
 
+    /**
+     * @param mixed $duration An interval/duration
+     */
     public function withSubtracted($duration): self
     {
         $duration = $duration instanceof self ? $duration : self::make($duration);
@@ -121,6 +127,9 @@ final class Duration extends DateInterval implements JsonSerializable
         return self::make($then->diff($now, true));
     }
 
+    /**
+     * @param int|float $multiplicator
+     */
     public function multipliedBy($multiplicator): self
     {
         if ($multiplicator < 0) {
@@ -136,6 +145,9 @@ final class Duration extends DateInterval implements JsonSerializable
         return self::make($result.' seconds');
     }
 
+    /**
+     * @param int|float $divisor
+     */
     public function dividedBy($divisor): self
     {
         $now = self::now();
@@ -147,21 +159,33 @@ final class Duration extends DateInterval implements JsonSerializable
         return self::make($result.' seconds');
     }
 
+    /**
+     * @param mixed $other An interval/duration
+     */
     public function isLargerThan($other): bool
     {
         return 1 === $this->compareTo($other);
     }
 
+    /**
+     * @param mixed $other An interval/duration
+     */
     public function equals($other): bool
     {
         return 0 === $this->compareTo($other);
     }
 
+    /**
+     * @param mixed $other An interval/duration
+     */
     public function isSmallerThan($other): bool
     {
         return -1 === $this->compareTo($other);
     }
 
+    /**
+     * @param mixed $other An interval/duration
+     */
     public function diff($other): self
     {
         $other = $other instanceof self ? $other : self::make($other);
@@ -173,6 +197,9 @@ final class Duration extends DateInterval implements JsonSerializable
         return self::make($here->diff($there, true));
     }
 
+    /**
+     * @param mixed $other An interval/duration
+     */
     public function compareTo($other): int
     {
         $other = $other instanceof self ? $other : self::make($other);
@@ -189,12 +216,12 @@ final class Duration extends DateInterval implements JsonSerializable
         return $this;
     }
 
-    public function jsonSerialize()
+    public function jsonSerialize(): string
     {
         return self::toDateIntervalSpec($this);
     }
 
-    public function __toString()
+    public function __toString(): string
     {
         return self::toDateIntervalSpec($this);
     }
