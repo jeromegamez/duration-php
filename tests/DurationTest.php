@@ -9,6 +9,7 @@ use DateTimeImmutable;
 use Gamez\Duration;
 use Gamez\Duration\Exception\InvalidDuration;
 use PHPUnit\Framework\TestCase;
+use stdClass;
 
 class DurationTest extends TestCase
 {
@@ -43,6 +44,39 @@ class DurationTest extends TestCase
             'DateInterval("PT24H")' => [new DateInterval('PT24H'), 'P1D'],
             'Duration("PT24H")' => [Duration::make('PT24H'), 'P1D'],
             'too verbose' => [Duration::make('P0Y0M0DT0H0M3600S'), 'PT1H'],
+            'object with __toString()' => [new class() {
+                public function __toString()
+                {
+                    return 'PT1H';
+                }
+            }, 'PT1H'],
+        ];
+    }
+
+    /**
+     * @test
+     */
+    public function its_constructor_throws_invalid_duration_errors()
+    {
+        $this->expectException(InvalidDuration::class);
+        new Duration('nonsense');
+    }
+
+    /**
+     * @test
+     * @dataProvider invalidValues
+     */
+    public function it_rejects_invalid_values_when_using_make($value)
+    {
+        $this->expectException(InvalidDuration::class);
+        Duration::make($value);
+    }
+
+    public function invalidValues()
+    {
+        return [
+            'object without __toString' => [new stdClass()],
+            'nonsense' => ['nonsense'],
         ];
     }
 

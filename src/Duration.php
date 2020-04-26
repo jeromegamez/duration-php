@@ -7,35 +7,49 @@ namespace Gamez;
 use DateInterval;
 use DateTimeImmutable;
 use Gamez\Duration\Exception\InvalidDuration;
+use JsonSerializable;
 use Throwable;
 
-final class Duration implements \JsonSerializable
+final class Duration extends DateInterval implements JsonSerializable
 {
     private const NONE = 'PT0S';
 
     /**
-     * @var DateInterval
+     * @param string $spec An interval specification
+     *
+     * @throws InvalidDuration if the specification cannot be parsed
      */
-    private $value;
-
-    private function __construct(DateInterval $dateInterval)
+    public function __construct(string $spec)
     {
-        $this->value = $this->normalizeInterval($dateInterval);
+        try {
+            parent::__construct($spec);
+        } catch (Throwable $e) {
+            throw InvalidDuration::because($e->getMessage(), $e->getCode());
+        }
     }
 
+    /**
+     * @param mixed $value An interval
+     *
+     * @throws InvalidDuration if the specification cannot be parsed
+     */
     public static function make($value): self
     {
         if ($value instanceof DateInterval) {
-            return new self($value);
+            return new self(self::toDateIntervalSpec(self::normalizeInterval($value)));
         }
 
         if (in_array($value, [0, null, false, true], true)) {
             return self::none();
         }
 
+        if (is_object($value) && !method_exists($value, '__toString')) {
+            throw InvalidDuration::because('The given object cannot be converted to a string');
+        }
+
         $stringValue = trim((string) $value);
 
-        if ($value === '') {
+        if ('' === $value) {
             return self::none();
         }
 
@@ -46,53 +60,65 @@ final class Duration implements \JsonSerializable
         if (preg_match('/^(\d+):(\d+)$/', $stringValue)) {
             [$minutes, $seconds] = array_map('intval', explode(':', $stringValue));
 
-            return new self(new DateInterval("PT{$minutes}M{$seconds}S"));
+            return new self("PT{$minutes}M{$seconds}S");
         }
 
         if (preg_match('/^(\d+):(\d+):(\d+)$/', $stringValue)) {
             [$hours, $minutes, $seconds] = array_map('intval', explode(':', $stringValue));
 
-            return new self(new DateInterval("PT{$hours}H{$minutes}M{$seconds}S"));
+            return new self("PT{$hours}H{$minutes}M{$seconds}S");
         }
 
         if (0 === strpos($stringValue, 'P')) {
-            return new self(new DateInterval($stringValue));
+            return new self(
+                self::toDateIntervalSpec(
+                    self::normalizeInterval(
+                        new self($stringValue)
+                    )
+                )
+            );
         }
 
         try {
-            return new self(DateInterval::createFromDateString($stringValue));
+            $interval = DateInterval::createFromDateString($stringValue);
         } catch (Throwable $e) {
-            throw InvalidDuration::because('Unable to parse value: '.$e->getMessage());
+            throw InvalidDuration::because("'{$stringValue}' is not a valid duration");
         }
+
+        return new self(
+            self::toDateIntervalSpec(
+                self::normalizeInterval($interval)
+            )
+        );
     }
 
     public static function none(): self
     {
-        return new self(new DateInterval(self::NONE));
+        return new self(self::NONE);
     }
 
     public function withAdded($duration): self
     {
         $duration = $duration instanceof self ? $duration : self::make($duration);
 
-        $now = $this->now();
+        $now = self::now();
         $then = $now->add($this->toDateInterval())->add($duration->toDateInterval());
 
-        return new self($then->diff($now, true));
+        return self::make($then->diff($now, true));
     }
 
     public function withSubtracted($duration): self
     {
         $duration = $duration instanceof self ? $duration : self::make($duration);
 
-        $now = $this->now();
+        $now = self::now();
         $then = $now->add($this->toDateInterval())->sub($duration->toDateInterval());
 
         if ($then < $now) {
             throw InvalidDuration::because('A duration cannot be smaller than zero');
         }
 
-        return new self($then->diff($now, true));
+        return self::make($then->diff($now, true));
     }
 
     public function multipliedBy($multiplicator): self
@@ -101,7 +127,7 @@ final class Duration implements \JsonSerializable
             throw InvalidDuration::because('A duration cannot be multiplied with a value smaller than zero');
         }
 
-        $now = $this->now();
+        $now = self::now();
         $there = $now->add($this->toDateInterval());
 
         $durationInSeconds = $there->getTimestamp() - $now->getTimestamp();
@@ -112,7 +138,7 @@ final class Duration implements \JsonSerializable
 
     public function dividedBy($divisor): self
     {
-        $now = $this->now();
+        $now = self::now();
         $there = $now->add($this->toDateInterval());
 
         $durationInSeconds = $there->getTimestamp() - $now->getTimestamp();
@@ -140,18 +166,18 @@ final class Duration implements \JsonSerializable
     {
         $other = $other instanceof self ? $other : self::make($other);
 
-        $now = $this->now();
+        $now = self::now();
         $here = $now->add($this->toDateInterval());
         $there = $now->add($other->toDateInterval());
 
-        return new self($here->diff($there, true));
+        return self::make($here->diff($there, true));
     }
 
     public function compareTo($other): int
     {
         $other = $other instanceof self ? $other : self::make($other);
 
-        $now = $this->now();
+        $now = self::now();
         $here = $now->add($this->toDateInterval());
         $there = $now->add($other->toDateInterval());
 
@@ -160,45 +186,46 @@ final class Duration implements \JsonSerializable
 
     public function toDateInterval(): DateInterval
     {
-        return $this->value;
+        return $this;
     }
 
     public function jsonSerialize()
     {
-        return $this->toDateIntervalSpec();
+        return self::toDateIntervalSpec($this);
     }
 
     public function __toString()
     {
-        return $this->toDateIntervalSpec();
+        return self::toDateIntervalSpec($this);
     }
 
-    private function now(): DateTimeImmutable
+    private static function now(): DateTimeImmutable
     {
-        return new DateTimeImmutable('@'.time());
+        static $now;
+
+        /* @noinspection PhpUnhandledExceptionInspection */
+        return $now = $now ?? new DateTimeImmutable('@'.time());
     }
 
-    private function normalizeInterval(DateInterval $value): DateInterval
+    private static function normalizeInterval(DateInterval $value): DateInterval
     {
-        $now = $this->now();
+        $now = self::now();
         $then = $now->add($value);
 
         return $now->diff($then);
     }
 
-    private function toDateIntervalSpec(): string
+    private static function toDateIntervalSpec(DateInterval $interval): string
     {
-        $current = $this->value;
-
         $spec = 'P';
-        $spec .= 0 !== $current->y ? $current->y.'Y' : '';
-        $spec .= 0 !== $current->m ? $current->m.'M' : '';
-        $spec .= 0 !== $current->d ? $current->d.'D' : '';
+        $spec .= 0 !== $interval->y ? $interval->y.'Y' : '';
+        $spec .= 0 !== $interval->m ? $interval->m.'M' : '';
+        $spec .= 0 !== $interval->d ? $interval->d.'D' : '';
 
         $spec .= 'T';
-        $spec .= 0 !== $current->h ? $current->h.'H' : '';
-        $spec .= 0 !== $current->i ? $current->i.'M' : '';
-        $spec .= 0 !== $current->s ? $current->s.'S' : '';
+        $spec .= 0 !== $interval->h ? $interval->h.'H' : '';
+        $spec .= 0 !== $interval->i ? $interval->i.'M' : '';
+        $spec .= 0 !== $interval->s ? $interval->s.'S' : '';
 
         if ('T' === substr($spec, -1)) {
             $spec = substr($spec, 0, -1);
