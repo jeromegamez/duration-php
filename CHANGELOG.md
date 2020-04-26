@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 4.1 - 2020-04-26
 
 * PHP 7.3.4 is now the minimum required version.
 * `Duration` now extends `DateInterval` and can be used interchangeably.
