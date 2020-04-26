@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+* PHP 7.3.4 is now the minimum required version.
+
 ## 4.0 - 2019-09-03
 
 * PHP 7.3 is now the minimum required version.
