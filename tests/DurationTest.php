@@ -18,7 +18,7 @@ class DurationTest extends TestCase
     {
         $now = new DateTimeImmutable();
 
-        $this->assertEquals($now, $now->add(Duration::none()->toDateInterval()));
+        $this->assertEquals($now, $now->add(Duration::none()));
     }
 
     /**

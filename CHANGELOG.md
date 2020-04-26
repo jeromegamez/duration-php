@@ -5,6 +5,7 @@
 * PHP 7.3.4 is now the minimum required version.
 * `Duration` now extends `DateInterval` and can be used interchangeably.
 * Objects having a `__toString()` method are now supported values.
+* `Duration::toDateInterval()` is now deprecated.
 
 ## 4.0 - 2019-09-03
 

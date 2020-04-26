@@ -105,7 +105,7 @@ final class Duration extends DateInterval implements JsonSerializable
         $duration = $duration instanceof self ? $duration : self::make($duration);
 
         $now = self::now();
-        $then = $now->add($this->toDateInterval())->add($duration->toDateInterval());
+        $then = $now->add($this)->add($duration);
 
         return self::make($then->diff($now, true));
     }
@@ -118,7 +118,7 @@ final class Duration extends DateInterval implements JsonSerializable
         $duration = $duration instanceof self ? $duration : self::make($duration);
 
         $now = self::now();
-        $then = $now->add($this->toDateInterval())->sub($duration->toDateInterval());
+        $then = $now->add($this)->sub($duration);
 
         if ($then < $now) {
             throw InvalidDuration::because('A duration cannot be smaller than zero');
@@ -137,7 +137,7 @@ final class Duration extends DateInterval implements JsonSerializable
         }
 
         $now = self::now();
-        $there = $now->add($this->toDateInterval());
+        $there = $now->add($this);
 
         $durationInSeconds = $there->getTimestamp() - $now->getTimestamp();
         $result = (int) round($durationInSeconds * $multiplicator);
@@ -151,7 +151,7 @@ final class Duration extends DateInterval implements JsonSerializable
     public function dividedBy($divisor): self
     {
         $now = self::now();
-        $there = $now->add($this->toDateInterval());
+        $there = $now->add($this);
 
         $durationInSeconds = $there->getTimestamp() - $now->getTimestamp();
         $result = (int) round($durationInSeconds / $divisor);
@@ -191,8 +191,8 @@ final class Duration extends DateInterval implements JsonSerializable
         $other = $other instanceof self ? $other : self::make($other);
 
         $now = self::now();
-        $here = $now->add($this->toDateInterval());
-        $there = $now->add($other->toDateInterval());
+        $here = $now->add($this);
+        $there = $now->add($other);
 
         return self::make($here->diff($there, true));
     }
@@ -205,12 +205,15 @@ final class Duration extends DateInterval implements JsonSerializable
         $other = $other instanceof self ? $other : self::make($other);
 
         $now = self::now();
-        $here = $now->add($this->toDateInterval());
-        $there = $now->add($other->toDateInterval());
+        $here = $now->add($this);
+        $there = $now->add($other);
 
         return $here <=> $there;
     }
 
+    /**
+     * @deprecated 4.1 Duration already is a DateInterval
+     */
     public function toDateInterval(): DateInterval
     {
         return $this;
