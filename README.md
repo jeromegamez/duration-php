@@ -31,8 +31,6 @@ You can then use Duration:
 
 ```php
 <?php
-require 'vendor/autoload.php';
-
 use Gamez\Duration;
 
 $duration = Duration::make('13 minutes 37 seconds');
@@ -49,6 +47,8 @@ $duration = Duration::none();
 #### DateIntervals
 
 ```php
+use Gamez\Duration;
+
 Duration::make('P13M37S');
 Duration::make(new DateInterval('P13M37S'));
 ```
@@ -56,6 +56,8 @@ Duration::make(new DateInterval('P13M37S'));
 #### Colon notation
 
 ```php
+use Gamez\Duration;
+
 Duration::make('13:37'); // minutes:seconds
 Duration::make('13:37:37'); // hours:minutes:seconds
 ```
@@ -66,6 +68,8 @@ A textual notation is any value that can be processed by
 [DateInterval::createFromDateString()](https://secure.php.net/manual/en/dateinterval.createfromdatestring.php)
 
 ```php
+use Gamez\Duration;
+
 Duration::make('13 minutes 37 seconds');
 ```
 
@@ -78,6 +82,8 @@ When transformed, a Duration will be
   for example "PT60S" would be converted to "PT1H"
 
 ```php
+use Gamez\Duration;
+
 $duration = Duration::make('8 days 29 hours 77 minutes');
 
 echo (string) $duration; // P9DT6H17M
@@ -88,6 +94,8 @@ echo get_class($duration->toDateInterval()); // DateInterval
 ### Comparisons
 
 ```php
+use Gamez\Duration;
+
 $oneSecond = Duration::make('1 second');
 $sixtySeconds = Duration::make('60 seconds');
 $oneMinute = Duration::make('1 minute');
@@ -109,6 +117,8 @@ usort($durations, function ($a, $b) {
 Results will always be rounded by the second.
 
 ```php
+use Gamez\Duration;
+
 $thirty = Duration::make('30 seconds');
 
 echo $thirty->withAdded('31 seconds'); // PT1M1S

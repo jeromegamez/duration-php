@@ -12,5 +12,6 @@ return PhpCsFixer\Config::create()
         'ordered_imports' => true,
         'phpdoc_align' => false,
         'phpdoc_order' => true,
+        'php_unit_method_casing' => null,
     ])
     ->setFinder($finder);
