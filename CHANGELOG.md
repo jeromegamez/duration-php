@@ -1,5 +1,9 @@
 # Changelog
 
+## 4.2 - 2020-12-19
+
+* Added support for PHP 8.0
+
 ## 4.1 - 2020-04-26
 
 * PHP 7.3.4 is now the minimum required version.
