@@ -49,8 +49,8 @@ $duration = Duration::none();
 ```php
 use Gamez\Duration;
 
-Duration::make('P13M37S');
-Duration::make(new DateInterval('P13M37S'));
+Duration::make('PT13M37S');
+Duration::make(new DateInterval('PT13M37S'));
 ```
 
 #### Colon notation
@@ -88,7 +88,6 @@ $duration = Duration::make('8 days 29 hours 77 minutes');
 
 echo (string) $duration; // P9DT6H17M
 echo json_encode($duration); // "P9DT6H17M"
-echo get_class($duration->toDateInterval()); // DateInterval
 ```
 
 ### Comparisons
