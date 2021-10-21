@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+* Added support for all PHP 8.x versions
+
 ## 4.2 - 2020-12-19
 
 * Added support for PHP 8.0
