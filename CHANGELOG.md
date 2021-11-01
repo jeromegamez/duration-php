@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 4.3. - 2021-11-01
 
 * Added support for all PHP 8.x versions
 
