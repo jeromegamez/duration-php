@@ -15,8 +15,8 @@
         "ext-ctype": "*"
     },
     "require-dev": {
-        "phpstan/phpstan": "^0.12.63",
-        "phpunit/phpunit": "^9.5"
+        "phpstan/phpstan": "^2.2.9",
+        "phpunit/phpunit": "^12.5.33"
     },
     "autoload": {
         "psr-4": {

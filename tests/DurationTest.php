@@ -8,29 +8,29 @@ use DateInterval;
 use DateTimeImmutable;
 use Gamez\Duration;
 use Gamez\Duration\Exception\InvalidDuration;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use stdClass;
 
 class DurationTest extends TestCase
 {
-    /** @test */
-    public function it_can_be_none()
+    public function testItCanBeNone(): void
     {
         $now = new DateTimeImmutable();
 
         $this->assertEquals($now, $now->add(Duration::none()));
     }
 
-    /**
-     * @test
-     * @dataProvider validValues
-     */
-    public function it_parses_a_value($value, $expectedSpec)
+    #[DataProvider('validValues')]
+    public function testItParsesAValue(mixed $value, string $expectedSpec): void
     {
         $this->assertSame($expectedSpec, (string) Duration::make($value));
     }
 
-    public function validValues()
+    /**
+     * @return array<string, array{0: mixed, 1: string}>
+     */
+    public static function validValues(): array
     {
         return [
             'nothing (null)' => [null, 'PT0S'],
@@ -53,26 +53,23 @@ class DurationTest extends TestCase
         ];
     }
 
-    /**
-     * @test
-     */
-    public function its_constructor_throws_invalid_duration_errors()
+    public function testItsConstructorThrowsInvalidDurationErrors(): void
     {
         $this->expectException(InvalidDuration::class);
         new Duration('nonsense');
     }
 
-    /**
-     * @test
-     * @dataProvider invalidValues
-     */
-    public function it_rejects_invalid_values_when_using_make($value)
+    #[DataProvider('invalidValues')]
+    public function testItRejectsInvalidValuesWhenUsingMake(mixed $value): void
     {
         $this->expectException(InvalidDuration::class);
         Duration::make($value);
     }
 
-    public function invalidValues()
+    /**
+     * @return array<string, array{0: mixed}>
+     */
+    public static function invalidValues(): array
     {
         return [
             'object without __toString' => [new stdClass()],
@@ -80,28 +77,24 @@ class DurationTest extends TestCase
         ];
     }
 
-    /** @test */
-    public function it_needs_a_unit()
+    public function testItNeedsAUnit(): void
     {
         $this->expectException(InvalidDuration::class);
         Duration::make(60);
     }
 
-    /** @test */
-    public function it_needs_a_parseable_value()
+    public function testItNeedsAParseableValue(): void
     {
         $this->expectException(InvalidDuration::class);
         Duration::make('xxx');
     }
 
-    /** @test */
-    public function it_optimizes_the_date_interval_spec()
+    public function testItOptimizesTheDateIntervalSpec(): void
     {
         $this->assertSame('P1DT1H', (string) Duration::make('PT24H60M'));
     }
 
-    /** @test */
-    public function it_can_be_added()
+    public function testItCanBeAdded(): void
     {
         $first = Duration::make('22 hours');
         $second = Duration::make('17 minutes');
@@ -110,8 +103,7 @@ class DurationTest extends TestCase
         $this->assertTrue($expected->equals($first->withAdded($second)));
     }
 
-    /** @test */
-    public function it_can_be_subtracted()
+    public function testItCanBeSubtracted(): void
     {
         $first = Duration::make('23 hours');
         $second = Duration::make('43 minutes');
@@ -120,15 +112,13 @@ class DurationTest extends TestCase
         $this->assertTrue($expected->equals($first->withSubtracted($second)));
     }
 
-    /** @test */
-    public function it_can_not_result_in_a_negative_value()
+    public function testItCanNotResultInANegativeValue(): void
     {
         $this->expectException(InvalidDuration::class);
         Duration::none()->withSubtracted(Duration::make('1 second'));
     }
 
-    /** @test */
-    public function it_can_be_divided()
+    public function testItCanBeDivided(): void
     {
         $given = Duration::make('13 minutes');
         $divisor = 2;
@@ -137,8 +127,7 @@ class DurationTest extends TestCase
         $this->assertTrue($expected->equals($given->dividedBy($divisor)));
     }
 
-    /** @test */
-    public function it_can_be_multiplied()
+    public function testItCanBeMultiplied(): void
     {
         $given = Duration::make('13 minutes');
         $multiplicator = 2;
@@ -147,15 +136,13 @@ class DurationTest extends TestCase
         $this->assertTrue($expected->equals($given->multipliedBy($multiplicator)));
     }
 
-    /** @test */
-    public function it_can_not_be_multiplied_with_a_negative_value()
+    public function testItCanNotBeMultipliedWithANegativeValue(): void
     {
         $this->expectException(InvalidDuration::class);
         Duration::none()->multipliedBy(-1.1);
     }
 
-    /** @test */
-    public function it_rounds_divided_seconds()
+    public function testItRoundsDividedSeconds(): void
     {
         $given = Duration::make('13 seconds');
         $divisor = 2;
@@ -164,8 +151,7 @@ class DurationTest extends TestCase
         $this->assertTrue($expected->equals($given->dividedBy($divisor)));
     }
 
-    /** @test */
-    public function it_can_be_compared()
+    public function testItCanBeCompared(): void
     {
         $given = Duration::make('60 minutes');
         $equal = Duration::make('1 hour');
@@ -177,8 +163,7 @@ class DurationTest extends TestCase
         $this->assertTrue($given->isSmallerThan($larger));
     }
 
-    /** @test */
-    public function it_knows_the_difference()
+    public function testItKnowsTheDifference(): void
     {
         $first = Duration::make('58 minutes');
         $second = Duration::make('2 hours 5 minutes');
@@ -190,14 +175,12 @@ class DurationTest extends TestCase
         $this->assertTrue($expected->equals($difference));
     }
 
-    /** @test */
-    public function it_can_be_casted_to_a_date_interval_spec_string()
+    public function testItCanBeCastedToADateIntervalSpecString(): void
     {
         $this->assertSame('PT1H', (string) Duration::make('1 hour'));
     }
 
-    /** @test */
-    public function it_can_be_json_encoded_to_a_date_interval_spec_string()
+    public function testItCanBeJsonEncodedToADateIntervalSpecString(): void
     {
         $this->assertSame('"PT1H"', json_encode(Duration::make('1 hour')));
     }

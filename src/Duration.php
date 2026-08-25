@@ -8,11 +8,12 @@ use DateInterval;
 use DateTimeImmutable;
 use Gamez\Duration\Exception\InvalidDuration;
 use JsonSerializable;
+use Stringable;
 use Throwable;
 
 final class Duration extends DateInterval implements JsonSerializable
 {
-    private const NONE = 'PT0S';
+    private const string NONE = 'PT0S';
 
     /**
      * @param string $spec An interval/duration specification
@@ -29,27 +30,29 @@ final class Duration extends DateInterval implements JsonSerializable
     }
 
     /**
-     * @param mixed $value An interval/duration
-     *
      * @throws InvalidDuration if the specification cannot be parsed
      */
-    public static function make($value): self
+    public static function make(mixed $duration): self
     {
-        if ($value instanceof DateInterval) {
-            return new self(self::toDateIntervalSpec(self::normalizeInterval($value)));
+        if ($duration instanceof DateInterval) {
+            return new self(self::toDateIntervalSpec(self::normalizeInterval($duration)));
         }
 
-        if (in_array($value, [0, null, false, true], true)) {
+        if (in_array($duration, [0, null, false, true], true)) {
             return self::none();
         }
 
-        if (is_object($value) && !method_exists($value, '__toString')) {
+        if (is_object($duration) && !method_exists($duration, '__toString')) {
             throw InvalidDuration::because('The given object cannot be converted to a string');
         }
 
-        $stringValue = trim((string) $value);
+        if (!is_scalar($duration) && !($duration instanceof Stringable)) {
+            throw InvalidDuration::because('A duration can only be created from a scalar value');
+        }
 
-        if ('' === $value) {
+        $stringValue = trim((string) $duration);
+
+        if ('' === $stringValue) {
             return self::none();
         }
 
@@ -69,7 +72,7 @@ final class Duration extends DateInterval implements JsonSerializable
             return new self("PT{$hours}H{$minutes}M{$seconds}S");
         }
 
-        if (0 === strpos($stringValue, 'P')) {
+        if (str_starts_with($stringValue, 'P')) {
             return new self(
                 self::toDateIntervalSpec(
                     self::normalizeInterval(
@@ -97,10 +100,7 @@ final class Duration extends DateInterval implements JsonSerializable
         return new self(self::NONE);
     }
 
-    /**
-     * @param mixed $duration An interval/duration
-     */
-    public function withAdded($duration): self
+    public function withAdded(mixed $duration): self
     {
         $duration = $duration instanceof self ? $duration : self::make($duration);
 
@@ -110,10 +110,7 @@ final class Duration extends DateInterval implements JsonSerializable
         return self::make($then->diff($now, true));
     }
 
-    /**
-     * @param mixed $duration An interval/duration
-     */
-    public function withSubtracted($duration): self
+    public function withSubtracted(mixed $duration): self
     {
         $duration = $duration instanceof self ? $duration : self::make($duration);
 
@@ -127,10 +124,7 @@ final class Duration extends DateInterval implements JsonSerializable
         return self::make($then->diff($now, true));
     }
 
-    /**
-     * @param int|float $multiplicator
-     */
-    public function multipliedBy($multiplicator): self
+    public function multipliedBy(int|float $multiplicator): self
     {
         if ($multiplicator < 0) {
             throw InvalidDuration::because('A duration cannot be multiplied with a value smaller than zero');
@@ -145,10 +139,7 @@ final class Duration extends DateInterval implements JsonSerializable
         return self::make($result.' seconds');
     }
 
-    /**
-     * @param int|float $divisor
-     */
-    public function dividedBy($divisor): self
+    public function dividedBy(int|float $divisor): self
     {
         $now = self::now();
         $there = $now->add($this);
@@ -159,34 +150,22 @@ final class Duration extends DateInterval implements JsonSerializable
         return self::make($result.' seconds');
     }
 
-    /**
-     * @param mixed $other An interval/duration
-     */
-    public function isLargerThan($other): bool
+    public function isLargerThan(mixed $other): bool
     {
         return 1 === $this->compareTo($other);
     }
 
-    /**
-     * @param mixed $other An interval/duration
-     */
-    public function equals($other): bool
+    public function equals(mixed $other): bool
     {
         return 0 === $this->compareTo($other);
     }
 
-    /**
-     * @param mixed $other An interval/duration
-     */
-    public function isSmallerThan($other): bool
+    public function isSmallerThan(mixed $other): bool
     {
         return -1 === $this->compareTo($other);
     }
 
-    /**
-     * @param mixed $other An interval/duration
-     */
-    public function diff($other): self
+    public function diff(mixed $other): self
     {
         $other = $other instanceof self ? $other : self::make($other);
 
@@ -197,10 +176,7 @@ final class Duration extends DateInterval implements JsonSerializable
         return self::make($here->diff($there, true));
     }
 
-    /**
-     * @param mixed $other An interval/duration
-     */
-    public function compareTo($other): int
+    public function compareTo(mixed $other): int
     {
         $other = $other instanceof self ? $other : self::make($other);
 
@@ -231,10 +207,14 @@ final class Duration extends DateInterval implements JsonSerializable
 
     private static function now(): DateTimeImmutable
     {
-        static $now;
+        /** @var DateTimeImmutable|null $now */
+        static $now = null;
 
-        /* @noinspection PhpUnhandledExceptionInspection */
-        return $now = $now ?? new DateTimeImmutable('@'.time());
+        if ($now === null) {
+            $now = new DateTimeImmutable('@'.time());
+        }
+
+        return $now;
     }
 
     private static function normalizeInterval(DateInterval $value): DateInterval
@@ -257,7 +237,7 @@ final class Duration extends DateInterval implements JsonSerializable
         $spec .= 0 !== $interval->i ? $interval->i.'M' : '';
         $spec .= 0 !== $interval->s ? $interval->s.'S' : '';
 
-        if ('T' === substr($spec, -1)) {
+        if (str_ends_with($spec, 'T')) {
             $spec = substr($spec, 0, -1);
         }
 
