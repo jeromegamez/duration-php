@@ -187,14 +187,6 @@ final class Duration extends DateInterval implements JsonSerializable
         return $here <=> $there;
     }
 
-    /**
-     * @deprecated 4.1 Duration already is a DateInterval
-     */
-    public function toDateInterval(): DateInterval
-    {
-        return $this;
-    }
-
     public function jsonSerialize(): string
     {
         return self::toDateIntervalSpec($this);
