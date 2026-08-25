@@ -10,13 +10,13 @@
         </testsuite>
     </testsuites>
 
-    <filter>
-        <whitelist>
+    <coverage>
+        <include>
             <directory suffix=".php">src</directory>
-        </whitelist>
-    </filter>
+        </include>
+    </coverage>
 
     <php>
-        <ini name="date.timezone" value="UTC" />
+        <ini name="date.timezone" value="UTC"/>
     </php>
 </phpunit>
