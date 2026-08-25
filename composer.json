@@ -29,7 +29,7 @@
     },
     "scripts": {
         "test": ["@phpunit", "@phpstan"],
-        "coverage": "vendor/bin/phpunit --coverage-html=build/coverage",
+        "coverage": "XDEBUG_MODE=coverage vendor/bin/phpunit --coverage-html=build/coverage",
         "phpunit": "vendor/bin/phpunit --testdox",
         "phpstan": "vendor/bin/phpstan analyze",
         "phpstan-ci": "vendor/bin/phpstan analyze -c phpstan.neon.dist --no-interaction --no-progress"
