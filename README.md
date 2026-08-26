@@ -12,6 +12,7 @@ Do you like to use `DateInterval` to compute and work with durations? Me neither
 * [Installation](#installation)
 * [Reference](#reference)
   * [Supported Input Values](#supported-input-values)
+  * [Weeks, months, and years](#weeks-months-and-years)
   * [Transformations](#transformations)
   * [Comparisons](#comparisons)
   * [Operations](#operations)
@@ -72,6 +73,18 @@ use Gamez\Duration;
 
 Duration::make('13 minutes 37 seconds');
 ```
+
+### Weeks, months, and years
+
+Weeks are normalized to seven days, so `P1W` is represented as `P7D`.
+
+Months and years do not have a fixed length. When `Duration` compares, adds, subtracts, multiplies, divides, or
+normalizes such values, it evaluates them relative to a cached UTC date and time. This avoids daylight-saving
+transitions, but results can still depend on the calendar date. For example, one month can span 28 to 31 days and one
+year can span 365 or 366 days.
+
+If exact elapsed time matters, prefer days, hours, minutes, and seconds. Use months and years only when
+calendar-relative behavior is intended.
 
 ### Transformations
 
