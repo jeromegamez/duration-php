@@ -2,10 +2,12 @@
 
 ## Unreleased
 
+## 5.0.0 - 2026-08-26
+
 * Dropped support for PHP <8.3
 * Removed deprecated `Duration::toDateInterval()` method
 
-## 4.3. - 2021-11-01
+## 4.3 - 2021-11-01
 
 * Added support for all PHP 8.x versions
 
