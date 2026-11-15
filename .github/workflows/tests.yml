@@ -11,10 +11,7 @@ jobs:
 
     strategy:
       matrix:
-        php: ["8.3", "8.4", "8.5"]
-        include:
-          - php: "8.6"
-            composer-options: "--ignore-platform-req=php+"
+        php: ["8.3", "8.4", "8.5", "8.6"]
 
     steps:
       - name: Checkout code
@@ -41,7 +38,7 @@ jobs:
           restore-keys: ${{ runner.os }}-composer-
 
       - name: Install dependencies
-        run: composer install --prefer-dist ${{ matrix.composer-options }}
+        run: composer install --prefer-dist
 
       - name: Setup Problem Matchers for PHPUnit
         run: echo "::add-matcher::${{ runner.tool_cache }}/phpunit.json"
